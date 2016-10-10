@@ -30,8 +30,8 @@ private:
 	uint8_t _rightMotorBackward;
 	uint8_t _leftMotorSpeed;
 	uint8_t _rightMotorSpeed;
-	uint8_t _leftMotorSpeedSetting;
-	uint8_t _rightMotorSpeedSetting;
+	uint8_t _leftMotorSpeedSetting = 255;
+	uint8_t _rightMotorSpeedSetting = 255;
 };
 
 #endif

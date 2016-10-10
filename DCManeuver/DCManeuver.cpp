@@ -1,6 +1,5 @@
 #include "DCManeuver.h"
 
-//<<constructor>> Define DC motor leads and switch them to output mode, write speed to pins if necessary
 DCManeuver::DCManeuver(uint8_t LMF = 4, uint8_t LMB = 2, uint8_t RMF = 8, uint8_t RMB = 7, uint8_t LMS = 3, uint8_t RMS = 6, uint8_t initSpeed = 255) {
 	pinMode(LMF, OUTPUT);
 	pinMode(LMB, OUTPUT);
@@ -18,7 +17,6 @@ DCManeuver::DCManeuver(uint8_t LMF = 4, uint8_t LMB = 2, uint8_t RMF = 8, uint8_
 	_rightMotorSpeedSetting = initSpeed;
 }
 
-//<<destructor>> Deactivate and unset all pins
 DCManeuver::~DCManeuver() {
 	analogWrite(_leftMotorSpeed, 0);
 	analogWrite(_rightMotorSpeed, 0);
