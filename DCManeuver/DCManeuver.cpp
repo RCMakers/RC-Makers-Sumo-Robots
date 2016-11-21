@@ -1,6 +1,7 @@
 #include "DCManeuver.h"
+#include <stdlib.h>
 
-DCManeuver::DCManeuver(uint8_t LMF = 4, uint8_t LMB = 2, uint8_t RMF = 8, uint8_t RMB = 7, uint8_t LMS = 3, uint8_t RMS = 6, uint8_t initSpeed = 255) {
+DCManeuver::DCManeuver(uint8_t LMF = 4, uint8_t LMB = 2, uint8_t RMF = 8, uint8_t RMB = 7, uint8_t LMS = 3, uint8_t RMS = 6, uint16_t initSpeed = 255, uint16_t max_pwm_value = 255) {
 	pinMode(LMF, OUTPUT);
 	pinMode(LMB, OUTPUT);
 	pinMode(RMF, OUTPUT);
@@ -15,6 +16,7 @@ DCManeuver::DCManeuver(uint8_t LMF = 4, uint8_t LMB = 2, uint8_t RMF = 8, uint8_
 	_rightMotorSpeed = RMS;
 	_leftMotorSpeedSetting = initSpeed;
 	_rightMotorSpeedSetting = initSpeed;
+	_maxPwm = max_pwm_value;
 }
 
 DCManeuver::~DCManeuver() {
@@ -30,41 +32,45 @@ DCManeuver::~DCManeuver() {
 	pinMode(_rightMotorBackward, INPUT);
 }
 
-void DCManeuver::setSpeedLeft(uint8_t newSpeed) {
-	if(newSpeed <= 255 && newSpeed >= 0) {
-		_leftMotorSpeedSetting = newSpeed;
-		analogWrite(_leftMotorSpeed, _leftMotorSpeedSetting);
-	}
+void DCManeuver::setSpeedLeft(uint16_t newSpeed) {
+	_leftMotorSpeedSetting = constrain(newSpeed, 0, _maxPwm);
+	analogWrite(_leftMotorSpeed, _leftMotorSpeedSetting);
 }
 
-void DCManeuver::setSpeedRight(uint8_t newSpeed) {
-	if(newSpeed <= 255 && newSpeed >= 0) {
-		_rightMotorSpeedSetting = newSpeed;
-		analogWrite(_rightMotorSpeed, _rightMotorSpeedSetting);
-	}
+void DCManeuver::setSpeedRight(uint16_t newSpeed) {
+	_rightMotorSpeedSetting = constrain(newSpeed, 0, _maxPwm);
+	analogWrite(_rightMotorSpeed, _rightMotorSpeedSetting);
 }
 
-void DCManeuver::setSpeed(uint8_t newSpeed) {
+void DCManeuver::setSpeed(uint16_t newSpeed) {
 	setSpeedLeft(newSpeed);
 	setSpeedRight(newSpeed);
 }
 
 void DCManeuver::equalizeSpeed() {
 	if(_rightMotorSpeedSetting > _leftMotorSpeedSetting) {
-		uint8_t diff = (_rightMotorSpeedSetting-_leftMotorSpeedSetting)/2;
+		uint16_t diff = (_rightMotorSpeedSetting-_leftMotorSpeedSetting)/2;
 		setSpeed(_rightMotorSpeedSetting-diff);
 	}
 	if(_leftMotorSpeedSetting > _rightMotorSpeedSetting) {
-		uint8_t diff = (_leftMotorSpeedSetting-_rightMotorSpeedSetting)/2;
+		uint16_t diff = (_leftMotorSpeedSetting-_rightMotorSpeedSetting)/2;
 		setSpeed(_leftMotorSpeedSetting-diff);
 	}
 }
 
-uint8_t DCManeuver::getSpeedLeft() {
+void DCManeuver::setMaxPwm(uint16_t max_pwm) {
+	_maxPwm = max_pwm;
+}
+
+uint16_t DCManeuver::getMaxPwm() {
+	return _maxPwm;
+}
+
+uint16_t DCManeuver::getSpeedLeft() {
 	return _leftMotorSpeedSetting;
 }
 
-uint8_t DCManeuver::getSpeedRight() {
+uint16_t DCManeuver::getSpeedRight() {
 	return _rightMotorSpeedSetting;
 }
 
@@ -138,4 +144,13 @@ void DCManeuver::coast() {
 	digitalWrite(_rightMotorForward, LOW);
 	digitalWrite(_leftMotorBackward, LOW);
 	digitalWrite(_rightMotorBackward, LOW);
+}
+
+void DCManeuver::joystick(int16_t x, int16_t y) {
+	setSpeedLeft(constrain(abs(y+x), 0, _maxPwm));
+	setSpeedRight(constrain(abs(y-x), 0, _maxPwm));
+	digitalWrite(_leftMotorForward, (y+x > 0));
+	digitalWrite(_leftMotorBackward, (y+x < 0));
+	digitalWrite(_rightMotorForward, (y-x > 0));
+	digitalWrite(_rightMotorBackward, (y-x < 0));
 }
