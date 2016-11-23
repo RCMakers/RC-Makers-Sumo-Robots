@@ -18,7 +18,7 @@ setSpeed	KEYWORD2
 equalizeSpeed	KEYWORD2
 getSpeedLeft	KEYWORD2
 getSpeedRight	KEYWORD2
-forward	KEYWORD2
+forward		KEYWORD2
 backward	KEYWORD2
 leftTurn	KEYWORD2
 rightTurn	KEYWORD2
@@ -26,9 +26,11 @@ frontLeftCurve	KEYWORD2
 frontRightCurve	KEYWORD2
 backLeftCurve	KEYWORD2
 backRightCurve	KEYWORD2
-brake	KEYWORD2
-coast	KEYWORD2
-
+brake		KEYWORD2
+coast		KEYWORD2
+joystick 	KEYWORD2
+setMaxPwm 	KEYWORD2
+getMaxPwm 	KEYWORD2
 
 #######################################
 # Constants (LITERAL1)

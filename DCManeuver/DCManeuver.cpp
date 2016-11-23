@@ -1,5 +1,6 @@
+#include "Arduino.h"
 #include "DCManeuver.h"
-#include <stdlib.h>
+#include "stdlib.h"
 
 DCManeuver::DCManeuver(uint8_t LMF = 4, uint8_t LMB = 2, uint8_t RMF = 8, uint8_t RMB = 7, uint8_t LMS = 3, uint8_t RMS = 6, uint16_t initSpeed = 255, uint16_t max_pwm_value = 255) {
 	pinMode(LMF, OUTPUT);

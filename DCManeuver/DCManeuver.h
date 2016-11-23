@@ -5,7 +5,7 @@
 
 class DCManeuver {
 public:
-	DCManeuver(uint8_t LMF = 4, uint8_t LMB = 2, uint8_t RMF = 8, uint8_t RMB = 7, uint8_t LMS = 3, uint8_t RMS = 6, uint16_t initSpeed = 255);
+	DCManeuver(uint8_t LMF = 4, uint8_t LMB = 2, uint8_t RMF = 8, uint8_t RMB = 7, uint8_t LMS = 3, uint8_t RMS = 6, uint16_t initSpeed = 255, uint16_t max_pwm_value = 255);
 	~DCManeuver();
 	void setSpeedLeft(uint16_t newSpeed);
 	void setSpeedRight(uint16_t newSpeed);
